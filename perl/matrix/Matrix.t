@@ -1,5 +1,5 @@
 # Test with:  prove Matrix.t
-use Test::Simple tests => 8;
+use Test::Simple tests => 9;
 use lib './';
 use Matrix;
 
@@ -27,3 +27,5 @@ ok($mtrx->getValue(2,2) == 22, 'Final loaded value is correct');
 ok($mtrx->getColumn(0) == @left, 'Get left column values');
 ok($mtrx->getColumn(2) == @right, 'Get right column values');
 ok($mtrx->setColumn(2, @tooMuch) != 0, 'Add too many values to a column fails');
+ok($mtrx->setColumn(0, @right) == 0, 'Add correct amount of values to a column succeeds');
+
