@@ -17,6 +17,6 @@ foreach $line (@lines) {
 }
 
 my $key = undef;
-foreach $key (reverse(sort { $wordcount{$a} <=> $wordcount{$b}} keys %wordcount )) {
+foreach $key (reverse(sort { $wordcount{$a} <=> $wordcount{$b} } keys %wordcount )) {
   print("$key: $wordcount{$key}\n");
 }
