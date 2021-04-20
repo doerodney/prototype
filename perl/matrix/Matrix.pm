@@ -42,6 +42,22 @@ sub getColumn() {
   return @values;
 }
 
+sub getDeterminant() {
+  my $self = shift;
+
+  my $det = undef;
+
+  my $nrows = $self->getRowCount();
+  my $ncols = $self->getColCount();
+
+  if ($nrows > 0 && ($nrows == $ncols)) {
+    # Start here:
+  }
+
+  return $det;
+}
+
+
 sub getIndex() {
   my ($self, $row, $col) = @_;
   my $ncols = $self->getColCount();

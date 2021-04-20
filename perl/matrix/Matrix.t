@@ -1,11 +1,12 @@
 # Test with:  prove Matrix.t
-use Test::Simple tests => 9;
+use Test::Simple tests => 10;
 use lib './';
 use Matrix;
 
 my $nCols = 3;
 my $nRows = 3;
 my $mtrx = Matrix->new($nRows, $nCols);
+my $nonsqr = Matrix->new(3, 4);
 my $row = 0;
 my $col = 0;
 my @left = (0, 10, 20);
@@ -28,4 +29,4 @@ ok($mtrx->getColumn(0) == @left, 'Get left column values');
 ok($mtrx->getColumn(2) == @right, 'Get right column values');
 ok($mtrx->setColumn(2, @tooMuch) != 0, 'Add too many values to a column fails');
 ok($mtrx->setColumn(0, @right) == 0, 'Add correct amount of values to a column succeeds');
-
+ok(defined($nonsqr->getDeterminant()) == 0, 'Determinant of non-square matrix is undefined');
