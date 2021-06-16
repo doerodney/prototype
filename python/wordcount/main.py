@@ -19,7 +19,6 @@ def get_doc_word_count(file_path):
 def main():
     d = get_doc_word_count('./resume_rod_doe.md')
     s = sorted(d, key=lambda word: int(d[word]), reverse=True)
-    # s = sorted(d, key=lambda x : int(d[x]), reverse=True)
     for key in s:
         print(f"{key} {d[key]}")
     
