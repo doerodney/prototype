@@ -17,6 +17,6 @@ test('matrix creation', () => {
 
 test('getIndex', () => {
   m = matrix(3,3);
-  expect(getIndex(m, 0, 0).toBe(0));
-  expect(getIndex(m, 2, 2).toBe(8));
+  expect(getIndex(m, 0, 0)).toBe(0);
+  expect(getIndex(m, 2, 2)).toBe(8);
 })
