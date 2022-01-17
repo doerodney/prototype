@@ -1,12 +1,12 @@
-function add(a, b) {
+const add = (a, b) => {
     return a + b;
 }
 
-function mul(a, b) {
+const mul = (a, b) => {
     return a * b;
 }
 
-function matrix(nrows, ncols) {
+const matrix = (nrows, ncols) => {
     data = Array(nrows * ncols).fill(0);
     obj = {
         nrows: nrows,
@@ -17,7 +17,7 @@ function matrix(nrows, ncols) {
     return obj
 }
 
-function getIndex(mtrx, row, col) {
+const  getIndex= (mtrx, row, col) => {
     let i = (
         (row < 0) || (row >= mtrx.nrows) ||
         (col < 0) || (col >= mtrx.ncols)
