@@ -17,7 +17,17 @@ const matrix = (nrows, ncols) => {
     return obj
 }
 
-const  getIndex= (mtrx, row, col) => {
+const fixColumnIndex = (i, ncols) => {
+    let fixed = i;
+    if (i < 0) { 
+        fixed = (i + ncols); 
+    } else if (i >= ncols) {
+        fixed = (i - ncols);        
+    }
+    return fixed;
+}
+
+const getIndex = (mtrx, row, col) => {
     let i = (
         (row < 0) || (row >= mtrx.nrows) ||
         (col < 0) || (col >= mtrx.ncols)
@@ -25,4 +35,4 @@ const  getIndex= (mtrx, row, col) => {
     return i
 }
 
-module.exports = { add, getIndex, matrix, mul };
+module.exports = { add, fixColumnIndex, getIndex, matrix, mul };
