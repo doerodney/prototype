@@ -17,6 +17,12 @@ const matrix = (nrows, ncols) => {
     return obj
 }
 
+
+const determinant = (mtrx) => {
+
+}
+
+
 const fixColumnIndex = (i, ncols) => {
     let fixed = i;
     if (i < 0) { 
@@ -35,4 +41,17 @@ const getIndex = (mtrx, row, col) => {
     return i
 }
 
-module.exports = { add, fixColumnIndex, getIndex, matrix, mul };
+const getValue = (mtrx, row, col) => {
+    const i = getIndex(mtrx, row, col);
+    const value = (i >= 0) ? mtrx.data[i] : NaN;
+    return value;
+}
+
+const setValue = (mtrx, row, col, value) => {
+    const i = getIndex(mtrx, row, col)
+    if (i >= 0) {
+        mtrx.data[i] = value;
+    }
+}
+
+module.exports = { add, fixColumnIndex, getIndex, getValue, matrix, mul, setValue};

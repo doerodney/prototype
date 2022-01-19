@@ -1,4 +1,4 @@
-const { add, fixColumnIndex, getIndex, matrix, mul }  = require("./matrix.js");
+const { add, fixColumnIndex, getIndex, getValue, matrix, mul, setValue }  = require("./matrix.js");
 
 test('add 1 + 2 to equal 3', () => {
     expect(add(1, 2)).toBe(3);
@@ -15,10 +15,34 @@ test('matrix creation', () => {
   expect(m.data.length).toBe(12);
 });
 
+test('determinant', () => {
+  mtrx = matrix(2, 2)
+  setValue(mtrx, 0, 0, 5);
+  setValue(mtrx, 0, 1, 2);
+  setValue(mtrx, 1, 0, 4);
+  setValue(mtrx, 1, 1, 2);
+
+
+})
+
+
 test('getIndex', () => {
   m = matrix(3,3);
   expect(getIndex(m, 0, 0)).toBe(0);
   expect(getIndex(m, 2, 2)).toBe(8);
+})
+
+test('set and get matrix values', () => {
+  mtrx = matrix(2,2);
+  setValue(mtrx, 0, 0, 5);
+  setValue(mtrx, 0, 1, 2);
+  setValue(mtrx, 1, 0, 4);
+  setValue(mtrx, 1, 1, 2);
+
+  expect(getValue(mtrx, 0, 0)).toBe(5);
+  expect(getValue(mtrx, 0, 1)).toBe(2);
+  expect(getValue(mtrx, 1, 0)).toBe(4);
+  expect(getValue(mtrx, 1, 1)).toBe(2);
 })
 
 test('fix column index', () => {
