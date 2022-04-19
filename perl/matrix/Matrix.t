@@ -1,5 +1,6 @@
 # Test with:  prove Matrix.t
-use Test::Simple tests => 10;
+use strict;
+use Test::Simple tests => 13;
 use lib './';
 use Matrix;
 
@@ -9,24 +10,25 @@ my $mtrx = Matrix->new($nRows, $nCols);
 my $nonsqr = Matrix->new(3, 4);
 my $row = 0;
 my $col = 0;
-my @left = (0, 10, 20);
-my @right = (2, 12, 22);
+my @left = (0, 1, 2);
+my @right = (2, 1, 2);
 my @tooMany = (2, 4, 6, 8);
 
 # Initialize the matrix:
-for ($row = 0; $row < $nRows; $row++) {
-  for ($col = 0; $col < $nCols; $col++) {
-    $mtrx->setValue($row, $col, ($row * 10) + $col);
-  }
-}
+$mtrx->setValue(0, 0, 0); $mtrx->setValue(0, 1, 1); $mtrx->setValue(0, 2, 2);
+$mtrx->setValue(1, 0, 1); $mtrx->setValue(1, 1, 3); $mtrx->setValue(1, 2, 1);
+$mtrx->setValue(2, 0, 2); $mtrx->setValue(2, 1, 2); $mtrx->setValue(2, 2, 2);
 
 ok(defined($mtrx) && ref $mtrx eq 'Matrix', 'new() works');
 ok($mtrx->getRowCount() == $nRows, 'Row count is correct');
 ok($mtrx->getColCount == $nCols, 'Column count is correct');
 ok($mtrx->getValue(0,0) == 0, 'First loaded value is correct');
-ok($mtrx->getValue(2,2) == 22, 'Final loaded value is correct');
+ok($mtrx->getValue(2,2) == 2, 'Final loaded value is correct');
 ok($mtrx->getColumn(0) == @left, 'Get left column values');
 ok($mtrx->getColumn(2) == @right, 'Get right column values');
-ok($mtrx->setColumn(2, @tooMuch) != 0, 'Add too many values to a column fails');
-ok($mtrx->setColumn(0, @right) == 0, 'Add correct amount of values to a column succeeds');
+ok($mtrx->setColumn(2, @tooMany) != 0, 'Add too many values to a column fails');
+ok($mtrx->setColumn(0, @left) == 0, 'Add correct amount of values to a column succeeds');
+ok($mtrx->fixColumn(4) == 1, 'Fix too large column is correct');
+ok($mtrx->fixColumn(-3) == 0, 'Fix negative column is correct');
 ok(defined($nonsqr->getDeterminant()) == 0, 'Determinant of non-square matrix is undefined');
+ok($mtrx->getDeterminant() == -8, '3x3 matrix determinant is correct');
