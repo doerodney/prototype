@@ -116,6 +116,15 @@ sub getValue() {
   return $value;
 }
 
+sub isSingular() {
+  my $self = shift;
+  
+  my $det = $self->getDeterminant();
+  my $isSingular = (defined($det) && $det != 0) ? 0 : 1;
+
+  return $isSingular;
+}
+
 sub setColumn() {
   my ($self, $col, @values) = @_;
   my $failure = 0;
@@ -125,7 +134,6 @@ sub setColumn() {
       $self->setValue($row, $col, $values[$row]);
     }
   } else {
-    warn "setColumn failed";
     $failure = 1;
   }
 
@@ -138,6 +146,58 @@ sub setValue() {
   my $idx = $self->getIndex($row, $col);
   my $radata = $self->{'radata'};
   $radata->[$idx] = $value;
+}
+
+# Solves AX=B system of equations:
+# a (self) is an NxN matrix object.
+# b is an NX1 matrix object.
+# x is returned as an Nx1 matrix or undef is something is wrong.
+sub solve() {
+  my ($self, $b) = @_;
+  my $x = undef;
+  if ($self->getRowCount() != $self->getColCount()) {
+    print "Matrix a has unequal row and column count.\n";
+  } elsif ($self->getRowCount() != $b->getRowCount()) {
+    print "Matrix a and b have unequal row counts.\n";
+  } elsif ($b->getColCount() > 1) {
+    print "Matrix b has more than one column.  What the hell are you doing?\n";
+  } else {
+    my $ncols = $self->getColCount();
+    my $nrows = $b->getRowCount();
+    my @bvals = ();
+    my @prev = ();
+    my $col = undef;
+    my $row = undef;
+
+    # Capture b values in a list for easy exchange:
+    for ($row = 0; $row < $nrows; $row++) {
+      push(@bvals, $b->getValue($row, 0));
+    }
+
+    my $denom = $self->getDeterminant();
+    my @dets = ();
+    my $det = undef;
+
+    # Calculate the determinants of matrices with substituted columns:
+    for ($col = 0; $col < $ncols; $col++) {
+      # Get the current column values:
+      @prev = $self->getColumn($col);
+      # Substitute the b values in the a column:
+      $self->setColumn($col, @bvals);
+      # Get the determinant and store it:
+      $det = $self->getDeterminant();
+      push(@dets, $det);
+      # Restore the column values:
+      $self->setColumn($col, @prev);
+    }
+    
+    $x = Matrix->new($nrows, 1);
+    for ($row = 0; $row < $nrows; $row++) {
+      $x->setValue($row, 0, $dets[$row] / $denom);
+    }
+ }
+
+  return $x;
 }
 
 sub toString() {
