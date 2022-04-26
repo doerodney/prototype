@@ -1,6 +1,10 @@
-package Matrix;
+package Matrix v0.0.1;
 
 use strict;
+
+sub moo() {
+  print "moo\n";
+}
 
 sub new () {
   my ($class, $nrows, $ncols) = @_;
@@ -19,7 +23,7 @@ sub new () {
   return $self;
 }
 
-sub fixColumn() {
+sub fixColumnIndex() {
   my ($self, $index) = @_;
   my $ncols = $self->getColCount();
   my $fixed = $index;
@@ -44,7 +48,7 @@ sub getColCount() {
   return $self->{'ncols'};
 }
 
-sub getColumn() {
+sub getColumnContent() {
   my ($self, $column) = @_;
   my @values = ();
   my $value = undef;
@@ -76,7 +80,7 @@ sub getDeterminant() {
     for ($col = 0; $col < $ncols; $col++) {
       $diag = 1;
       for ($row = 0; $row < $nrows; $row++) {
-        $fixed = $self->fixColumn($col + $row);
+        $fixed = $self->fixColumnIndex($col + $row);
         $value = $self->getValue($row, $fixed);
         $diag *= $value;
       }
@@ -87,7 +91,7 @@ sub getDeterminant() {
     for ($col = $ncols - 1; $col >= 0; $col--) {
       $diag = 1;
       for ($row = 0; $row < $nrows; $row++) {
-        $fixed = $self->fixColumn($col - $row);
+        $fixed = $self->fixColumnIndex($col - $row);
         $value = $self->getValue($row, $fixed);
         $diag *= $value;
       }
@@ -125,7 +129,7 @@ sub isSingular() {
   return $isSingular;
 }
 
-sub setColumn() {
+sub setColumnContent() {
   my ($self, $col, @values) = @_;
   my $failure = 0;
   my $nRows = $self->getRowCount();
@@ -151,7 +155,7 @@ sub setValue() {
 # Solves AX=B system of equations:
 # a (self) is an NxN matrix object.
 # b is an NX1 matrix object.
-# x is returned as an Nx1 matrix or undef is something is wrong.
+# x is returned as an Nx1 matrix or undef if something is wrong.
 sub solve() {
   my ($self, $b) = @_;
   my $x = undef;
@@ -181,14 +185,14 @@ sub solve() {
     # Calculate the determinants of matrices with substituted columns:
     for ($col = 0; $col < $ncols; $col++) {
       # Get the current column values:
-      @prev = $self->getColumn($col);
+      @prev = $self->getColumnContent($col);
       # Substitute the b values in the a column:
-      $self->setColumn($col, @bvals);
+      $self->setColumnContent($col, @bvals);
       # Get the determinant and store it:
       $det = $self->getDeterminant();
       push(@dets, $det);
       # Restore the column values:
-      $self->setColumn($col, @prev);
+      $self->setColumnContent($col, @prev);
     }
     
     $x = Matrix->new($nrows, 1);
