@@ -2,9 +2,6 @@ package Matrix v0.0.1;
 
 use strict;
 
-sub moo() {
-  print "moo\n";
-}
 
 sub new () {
   my ($class, $nrows, $ncols) = @_;
