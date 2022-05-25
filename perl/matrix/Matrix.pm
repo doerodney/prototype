@@ -2,7 +2,11 @@ package Matrix v0.0.1;
 
 use strict;
 
-
+# Solves an NxN set of simulataneous equations of the form AX=B.
+# Uses Cramer's rule (not Gaussian elimination) for simplicity.
+# May not be as performant as Gaussian elimination.
+# Create the A and B matrices, then call the solve method on the A matrix,
+# passing the B matrix as an argument.  The solve method returns the X matrix.
 sub new () {
   my ($class, $nrows, $ncols) = @_;
   my $self = {};
@@ -161,7 +165,7 @@ sub solve() {
   } elsif ($self->getRowCount() != $b->getRowCount()) {
     print "Matrix a and b have unequal row counts.\n";
   } elsif ($b->getColCount() > 1) {
-    print "Matrix b has more than one column.  What the hell are you doing?\n";
+    print "Matrix b has more than one column.  It should only have one column.\n";
   } else {
     my $ncols = $self->getColCount();
     my $nrows = $b->getRowCount();

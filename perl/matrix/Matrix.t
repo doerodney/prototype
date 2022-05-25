@@ -34,6 +34,7 @@ $singular->setValue(0, 0, 0); $singular->setValue(0, 1, 0); $singular->setValue(
 $singular->setValue(1, 0, 0); $singular->setValue(1, 1, 0); $singular->setValue(1, 2, 0);
 $singular->setValue(2, 0, 0); $singular->setValue(2, 1, 0); $singular->setValue(2, 2, 0);
 
+# Add tests here. Update the count of tests above.
 ok(defined($mtrx) && ref $mtrx eq 'Matrix', 'new() works');
 ok($mtrx->getRowCount() == $nRows, 'Row count is correct');
 ok($mtrx->getColCount == $nCols, 'Column count is correct');
