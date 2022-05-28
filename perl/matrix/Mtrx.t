@@ -1,6 +1,6 @@
 # Test with:  prove Mtrx.t
 use strict;
-use Test::Simple tests => 3;
+use Test::Simple tests => 6;
 use lib './';
 require Mtrx;
 
@@ -11,12 +11,14 @@ Mtrx::SetValue($a, 0, 0, 1); Mtrx::SetValue($a, 0, 1, 1); Mtrx::SetValue($a, 0, 
 Mtrx::SetValue($a, 1, 0, 2); Mtrx::SetValue($a, 1, 1, 3); Mtrx::SetValue($a, 1, 2, 4);
 Mtrx::SetValue($a, 2, 0, 2); Mtrx::SetValue($a, 2, 1, 1); Mtrx::SetValue($a, 2, 2, 2);
 
-
+my @columnContent = (1, 2, 2);
 
 # Add tests here.  Update the count of tests above.
 ok(defined($a) && $a->{'nrows'} == $nrows && $a->{'ncols'} == $ncols, 'Mtrx::New works');
 ok(Mtrx::GetColCount($a) == $ncols, 'Mtrx::GetColCount works');
 ok(Mtrx::GetRowCount($a) == $nrows, 'Mtrx::GetRowCount works');
 ok(Mtrx::GetValue($a, 0, 0) == 1, 'Mtrx::[Get|Set]Value work');
+ok(Mtrx::GetValue($a, 2, 2) == 2, 'Mtrx::[Get|Set]Value work');
+ok(Mtrx::getColumnContent($a, 0) == @columnContent, 'Mtrx::getColumnContent works');
 
 
