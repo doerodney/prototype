@@ -34,8 +34,8 @@ sub GetDeterminant() {
     for ($col = 0; $col < $ncols; $col++) {
       $diag = 1;
       for ($row = 0; $row < $nrows; $row++) {
-        $fixed = fixColumnIndex($mtrx, $col + $row);
-        $i = getIndex($mtrx, $row, $fixed);
+        $fixed = &fixColumnIndex($mtrx, $col + $row);
+        $i = &datumIndex($mtrx, $row, $fixed);
         $value = $mtrx->{'radata'}->[$i];
         $diag *= $value;
       }
@@ -46,8 +46,8 @@ sub GetDeterminant() {
     for ($col = $ncols - 1; $col >= 0; $col--) {
       $diag = 1;
       for ($row = 0; $row < $nrows; $row++) {
-        $fixed = fixColumnIndex($mtrx, $col - $row);
-        $i = getIndex($mtrx, $row, $fixed);
+        $fixed = &fixColumnIndex($mtrx, $col - $row);
+        $i = &datumIndex($mtrx, $row, $fixed);
         $value = $mtrx->{'radata'}->[$i];
         $diag *= $value;
       }
@@ -58,11 +58,12 @@ sub GetDeterminant() {
   return $det;
 }
 
+
 sub GetValue() {
   my ($mtrx, $row, $col) = @_;
-    my $val = undef;
-    if (($row >= 0) && ($col >=0) && ($row < $mtrx->{'nrows'}) && ($col < $mtrx->{'ncols'})) {
-    my $i = getIndex($mtrx, $row, $col);
+  my $val = undef;
+  if (($row >= 0) && ($col >=0) && ($row < $mtrx->{'nrows'}) && ($col < $mtrx->{'ncols'})) {
+    my $i = &datumIndex($mtrx, $row, $col);
     $val = $mtrx->{'radata'}->[$i];
   }
   return $val;
@@ -89,10 +90,18 @@ sub New() {
 
 sub SetValue() {
   my ($mtrx, $row, $col, $val) = @_;
-  my $i = getIndex($mtrx, $row, $col);
+  my $i = &datumIndex($mtrx, $row, $col);
   $mtrx->{'radata'}->[$i] = $val;
 }
 
+
+sub datumIndex() {
+  my ($mtrx, $row, $col) = @_;
+  my $ncols = $mtrx->{'ncols'};
+  my $idx = ($row * $ncols) + $col;
+
+  return $idx;
+}
 
 sub fixColumnIndex() {
   my ($mtrx, $index) = @_;
@@ -118,7 +127,7 @@ sub getColumnContent() {
   my $i = undef;
 
   for (my $row = 0; $row < $rowCount; $row++) {
-    $i = getIndex($mtrx, $row, $col);
+    $i = &datumIndex($mtrx, $row, $col);
 
     $value = $mtrx->{'radata'}->[$i];
     push(@values, $value);
@@ -126,14 +135,24 @@ sub getColumnContent() {
   return @values;
 }
 
+  
+sub setColumnContent() {
+  my ($mtrx, $col, @values) = @_;
+  my $failure = 0;
+  my $i = 0;
+  my $nRows = $mtrx->{'nrows'};
+  if ($nRows == scalar(@values)) {
+    for (my $row = 0; $row < $nRows; $row++) {
+      $i = &datumIndex($mtrx, $row, $col);
+      $mtrx->{'radata'}->[$i] = $values[$row];
+    }
+  } else {
+    $failure = 1;
+  }
 
-sub getIndex() {
-  my ($mtrx, $row, $col) = @_;
-  my $ncols = $mtrx->{'ncols'};
-  my $idx = ($row * $ncols) + $col;
-
-  return $idx;
+  return $failure;
 }
+
 
 
 1; # Required by module loader
