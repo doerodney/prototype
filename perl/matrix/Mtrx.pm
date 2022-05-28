@@ -14,6 +14,50 @@ sub GetRowCount() {
 }
 
 
+sub GetDeterminant() {
+  my $mtrx = shift;
+
+  my $det = undef;
+
+  my $nrows = $mtrx->{'nrows'};
+  my $ncols = $mtrx->{'ncols'};
+  my $col = 0;
+  my $row = 0;
+  my $diag = 1;
+  my $i = 0;
+  my $fixed = 0;
+  my $value = 0;
+
+  if ($nrows > 0 && ($nrows == $ncols)) {
+    $det = 0;
+    # Calculate sum of L->R diagonals:
+    for ($col = 0; $col < $ncols; $col++) {
+      $diag = 1;
+      for ($row = 0; $row < $nrows; $row++) {
+        $fixed = fixColumnIndex($mtrx, $col + $row);
+        $i = getIndex($mtrx, $row, $fixed);
+        $value = $mtrx->{'radata'}->[$i];
+        $diag *= $value;
+      }
+      $det += $diag;
+    }
+
+    # Calculate sum of R->L diagonals:
+    for ($col = $ncols - 1; $col >= 0; $col--) {
+      $diag = 1;
+      for ($row = 0; $row < $nrows; $row++) {
+        $fixed = fixColumnIndex($mtrx, $col - $row);
+        $i = getIndex($mtrx, $row, $fixed);
+        $value = $mtrx->{'radata'}->[$i];
+        $diag *= $value;
+      }
+      $det -= $diag;
+    }
+  }
+
+  return $det;
+}
+
 sub GetValue() {
   my ($mtrx, $row, $col) = @_;
     my $val = undef;
