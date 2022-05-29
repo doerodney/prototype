@@ -19,8 +19,8 @@ sub GetDeterminant() {
 
   my $det = undef;
 
-  my $nrows = $mtrx->{'nrows'};
-  my $ncols = $mtrx->{'ncols'};
+  my $nrows = &GetRowCount($mtrx);
+  my $ncols = &GetColCount($mtrx);
   my $col = 0;
   my $row = 0;
   my $diag = 1;
@@ -35,8 +35,7 @@ sub GetDeterminant() {
       $diag = 1;
       for ($row = 0; $row < $nrows; $row++) {
         $fixed = &fixColumnIndex($mtrx, $col + $row);
-        $i = &datumIndex($mtrx, $row, $fixed);
-        $value = $mtrx->{'radata'}->[$i];
+        $value = &GetValue($mtrx, $row, $fixed);
         $diag *= $value;
       }
       $det += $diag;
@@ -47,8 +46,7 @@ sub GetDeterminant() {
       $diag = 1;
       for ($row = 0; $row < $nrows; $row++) {
         $fixed = &fixColumnIndex($mtrx, $col - $row);
-        $i = &datumIndex($mtrx, $row, $fixed);
-        $value = $mtrx->{'radata'}->[$i];
+        $value = &GetValue($mtrx, $row, $fixed);
         $diag *= $value;
       }
       $det -= $diag;
@@ -108,15 +106,15 @@ sub SetValue() {
 sub Solve() {
   my ($a, $b) = @_;
   my $x = undef;
-  if ($a->{'nrows'} != $a->{'ncols'}) {
+  if (&GetRowCount($a) != &GetColCount($a)) {
     print "Matrix a has unequal row and column count.\n";
-  } elsif ($a->{'nrows'} != $b->{'nrows'}) {
+  } elsif (&GetRowCount($a) != &GetRowCount($b)) {
     print "Matrix a and b have unequal row counts.\n";
-  } elsif ($b->{'ncols'} > 1) {
+  } elsif (&GetColCount($b) > 1) {
     print "Matrix b has more than one column.  It should only have one column.\n";
   } else {
-    my $ncols = $a->{'ncols'};
-    my $nrows = $b->{'nrows'};
+    my $ncols = &GetColCount($a);
+    my $nrows = &GetRowCount($b);
     my @bvals = ();
     my @prev = ();
     my $col = undef;
@@ -125,8 +123,7 @@ sub Solve() {
 
     # Capture b values in a list for easy exchange:
     for ($row = 0; $row < $nrows; $row++) {
-      $i = &datumIndex($b, $row, 0);
-      push(@bvals, $b->{'radata'}->[$i]);
+      push(@bvals, &GetValue($b, $row, 0));
     }
 
     my $denom = &GetDeterminant($a);
@@ -146,10 +143,12 @@ sub Solve() {
       &setColumnContent($a, $col, @prev);
     }
     
+    # Store solution value in $x matrix:
     $x = &New($nrows, 1);
+    my $value = undef;
     for ($row = 0; $row < $nrows; $row++) {
-      $i = &datumIndex($x, $row, 0);
-      $x->{'radata'}->[$i] = $dets[$row] / $denom;
+      $value = $dets[$row] / $denom;
+      &SetValue($x, $row, 0, $value);
     }
  }
 
