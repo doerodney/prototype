@@ -95,6 +95,58 @@ sub SetValue() {
 }
 
 
+sub Solve() {
+  my ($a, $b) = @_;
+  my $x = undef;
+  if ($a->{'nrows'} != $a->{'ncols'}) {
+    print "Matrix a has unequal row and column count.\n";
+  } elsif ($a->{'nrows'} != $b->{'nrows'}) {
+    print "Matrix a and b have unequal row counts.\n";
+  } elsif ($b->{'ncols'} > 1) {
+    print "Matrix b has more than one column.  It should only have one column.\n";
+  } else {
+    my $ncols = $a->{'ncols'};
+    my $nrows = $b->{'nrows'};
+    my @bvals = ();
+    my @prev = ();
+    my $col = undef;
+    my $i = 0;
+    my $row = undef;
+
+    # Capture b values in a list for easy exchange:
+    for ($row = 0; $row < $nrows; $row++) {
+      $i = &datumIndex($b, $row, 0);
+      push(@bvals, $b->{'radata'}->[$i]);
+    }
+
+    my $denom = &GetDeterminant($a);
+    my @dets = ();
+    my $det = undef;
+
+    # Calculate the determinants of matrices with substituted columns:
+    for ($col = 0; $col < $ncols; $col++) {
+      # Get the current column values:
+      @prev = &getColumnContent($a, $col);
+      # Substitute the b values in the a column:
+      &setColumnContent($a, $col, @bvals);
+      # Get the determinant and store it:
+      $det = &GetDeterminant($a);
+      push(@dets, $det);
+      # Restore the column values:
+      &setColumnContent($a, $col, @prev);
+    }
+    
+    $x = &New($nrows, 1);
+    for ($row = 0; $row < $nrows; $row++) {
+      $i = &datumIndex($x, $row, 0);
+      $x->{'radata'}->[$i] = $dets[$row] / $denom;
+    }
+ }
+
+ return $x;
+}
+
+
 sub datumIndex() {
   my ($mtrx, $row, $col) = @_;
   my $ncols = $mtrx->{'ncols'};
@@ -102,6 +154,7 @@ sub datumIndex() {
 
   return $idx;
 }
+
 
 sub fixColumnIndex() {
   my ($mtrx, $index) = @_;
