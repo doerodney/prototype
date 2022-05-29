@@ -70,21 +70,31 @@ sub GetValue() {
 }
 
 
+sub IsSingular() {
+  my $mtrx = shift;
+  
+  my $det = &GetDeterminant($mtrx);
+  my $isSingular = (defined($det) && $det != 0) ? 0 : 1;
+
+  return $isSingular;
+}
+
+
 sub New() {
   my ($nrows, $ncols) = @_;
 
-  my $self = {};
-  $self->{'nrows'} = $nrows;
-  $self->{'ncols'} = $ncols;
+  my $mtrx = {};
+  $mtrx->{'nrows'} = $nrows;
+  $mtrx->{'ncols'} = $ncols;
   
   my @data = ();
   for (my $i = 0; $i < $nrows * $ncols; $i++) {
     push(@data, undef);
   }
 
-  $self->{'radata'} = \@data;
+  $mtrx->{'radata'} = \@data;
 
-  return $self;
+  return $mtrx;
 }
 
 
@@ -147,6 +157,28 @@ sub Solve() {
 }
 
 
+sub ToString() {
+  my $mtrx = shift;
+
+  my $msg = undef;
+  my $nrows = &GetRowCount($mtrx);
+  my $ncols = &GetColCount($mtrx);
+  my $row = 0;
+  my $col = 0;
+  my $value = 0;
+  
+  for ($row = 0; $row < $nrows; $row++) {
+    for ($col = 0; $col < $ncols; $col++) {
+      $value = &GetValue($mtrx, $row, $col);
+      $msg .= "\t$value";
+    }
+    $msg .= "\n";
+  }
+
+  return $msg;
+}
+
+
 sub datumIndex() {
   my ($mtrx, $row, $col) = @_;
   my $ncols = $mtrx->{'ncols'};
@@ -187,8 +219,8 @@ sub getColumnContent() {
   }
   return @values;
 }
-
   
+
 sub setColumnContent() {
   my ($mtrx, $col, @values) = @_;
   my $failure = 0;
