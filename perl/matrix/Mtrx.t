@@ -1,6 +1,6 @@
 # Test with:  prove Mtrx.t
 use strict;
-use Test::Simple tests => 13;
+use Test::More;
 use lib './';
 require Mtrx;
 
@@ -52,4 +52,4 @@ ok(Mtrx::GetValue($x, 0, 0) == 1, 'validate x row 0');
 ok(Mtrx::GetValue($x, 1, 0) == 5, 'validate x row 1');  
 ok(Mtrx::GetValue($x, 2, 0) == 10, 'validate x row 2');
 
-
+done_testing();
