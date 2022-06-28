@@ -39,28 +39,19 @@ func init() {
 
 func buildGraph(edges []road) map[string][]string {
 	graph := make(map[string][]string)
+
+	var addEdge = func(from string, to string) {
+		_, ok := graph[from]
+		if !ok {
+			s := []string{}
+			graph[from] = s
+		}
+		graph[from] = append(graph[from], to)
+	}
 	
 	for _, r := range edges {
-		// Test if From is key in graph.
-		_, ok := graph[r.From]
-		// From is not in graph. Add it as key.
-		if !ok {
-			// Create empty slice as value.
-			s := []string{}
-			graph[r.From] = s 
-		}
-
-		// Add r.To to list of paths from r.From
-		graph[r.From] = append(graph[r.From], r.To)
-
-		// Test if To is key in graph
-		_, ok = graph[r.To]
-		if !ok {
-			s := []string{}
-			graph[r.To] = s
-		}
-
-		graph[r.To] = append(graph[r.To], r.From)
+		addEdge(r.From, r.To)
+		addEdge(r.To, r.From)
 	}
 
 	return graph
