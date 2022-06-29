@@ -10,22 +10,31 @@ import (
 	"fmt"
 )
 
+
 type road struct {
 	From string
 	To string
 }
 
+
 type parcel struct {
 	At string
 	To string
+	RobotId int
 }
+
 
 type state struct {
-	robotLocation string
-	parcels []parcel
+	RobotId int
+	RobotLocation string
+	Pickup []parcel
+	Loaded []parcel
+	Delivered []parcel
 }
 
+
 var roads []road
+
 
 func init() {
 	roads = []road {
@@ -80,8 +89,9 @@ func init() {
 	}
 
 	initialState = state {
-		robotLocation: "NW",
-		parcels: parcels,
+		RobotId: 1,
+		RobotLocation: "NW",
+		Pickup: parcels,
 	}
 
 }
@@ -107,10 +117,26 @@ func buildGraph(edges []road) map[string][]string {
 }
 
 
-// func move(current state, destination string) state {
+func load(current state) {
+	// Checks the current state for Pickup parcels at the robot location.
+	// Sets the RobotId for the parcel to indicate that it is loaded.
+	// Moves the parcel from the Pickup to the Loaded state 
+}
 
-// 	return current
-// }
+
+func move(current state, destination string) state {
+
+	return current
+}
+
+
+func unload(current state) {
+	// Checks the Loaded state for parcels destined for the robot location.
+	// Moves parcels from the Loaded to the Delivered state.
+	
+
+}
+
 
 func main() {
 	graph := buildGraph(roads)
