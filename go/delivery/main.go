@@ -1,3 +1,9 @@
+/*--
+Graph exercise in which a robot moves through a virtual space.  
+At each location, it unloads then load parcels, as necessary.
+
+--*/
+
 package main
 
 import (
@@ -9,14 +15,29 @@ type road struct {
 	To string
 }
 
+type parcel struct {
+	At string
+	To string
+}
+
+type state struct {
+	robotLocation string
+	parcels []parcel
+}
+
 var roads []road
 
 func init() {
 	roads = []road {
 		{
 			From: "NW",
+			To: "NC",
+		},
+		{
+			From: "NC",
 			To: "NE",
 		},
+
 		{
 			From: "NW",
 			To: "SW",
@@ -27,6 +48,10 @@ func init() {
 		},
 		{
 			From: "SW",
+			To: "SC",
+		},
+		{
+			From: "SC",
 			To: "SE",
 		},
 		{
@@ -36,6 +61,30 @@ func init() {
 	}
 }
 
+
+var initialState state
+func init() {
+	parcels := []parcel {
+		{
+			At: "NW",
+			To: "SE",
+		},
+		{
+			At: "NW",
+			To: "NE",
+		},
+		{
+			At: "SW",
+			To: "NE",
+		},
+	}
+
+	initialState = state {
+		robotLocation: "NW",
+		parcels: parcels,
+	}
+
+}
 
 func buildGraph(edges []road) map[string][]string {
 	graph := make(map[string][]string)
@@ -58,7 +107,14 @@ func buildGraph(edges []road) map[string][]string {
 }
 
 
+// func move(current state, destination string) state {
+
+// 	return current
+// }
+
 func main() {
 	graph := buildGraph(roads)
-	fmt.Printf("graph: %v\n", graph)
+	fmt.Printf("graph: %v\n", graph)	
+	// var current state = initialState
+
 }
