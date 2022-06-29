@@ -120,11 +120,19 @@ func buildGraph(edges []road) map[string][]string {
 func load(current state) {
 	// Checks the current state for Pickup parcels at the robot location.
 	// Sets the RobotId for the parcel to indicate that it is loaded.
-	// Moves the parcel from the Pickup to the Loaded state 
+	// Moves the parcel from the Pickup to the Loaded list.
 }
 
 
-func move(current state, destination string) state {
+func move(current state) state {
+	// Check adjacent locations for Pickup parcels.
+	// Check loaded parcels for adjacent locations.
+	// Select new location.
+	// Update location.
+	// fmt.Printf("Moving from %s to %s to %s.", here, there, reason)
+	// Unload parcels destined for new location.
+	// Load parcels at new location.
+	// Return updated state.
 
 	return current
 }
@@ -132,8 +140,8 @@ func move(current state, destination string) state {
 
 func unload(current state) {
 	// Checks the Loaded state for parcels destined for the robot location.
-	// Moves parcels from the Loaded to the Delivered state.
-	
+	// Moves parcels from the Loaded list to the Delivered list.
+
 
 }
 
