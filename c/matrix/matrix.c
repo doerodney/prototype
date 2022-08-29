@@ -1,36 +1,37 @@
+#include <math.h> //NAN
 #include <stdlib.h>
 #include <string.h>
 #include "matrix.h"
 
+// local functions;
 int fixColumnIndex(const Matrix *m, int idx);
 Matrix* getColumnContent(const Matrix *src, int col);
 int getDatumIndex(const Matrix *m, int row, int col);
 
 
-
+// Matrix constructor:
 Matrix* matrix_new(int nrows, int ncols) {
-  Matrix  *p = NULL;
+  Matrix  *out = NULL;
   // Allocate memory for the data:
   double *pd = calloc((size_t)(nrows * ncols), sizeof(*pd));
 
   // Allocate memory for the matrix: 
   if (pd) {
-    p = malloc(sizeof(Matrix));
+    out = malloc(sizeof(Matrix));
 
-    if (p) {
-      p->nrows = nrows;
-      p->ncols = ncols;
-      p->data = pd;
+    if (out) {
+      *out = (Matrix) {.nrows = nrows, .ncols = ncols, .data = pd};
     }
     else {
       free((void*) pd);
     }
   }
 
-  return p;
+  return out;
 }
 
 
+// Create a copy of a matrix:
 Matrix* matrix_copy(const Matrix* src)
 {
   Matrix *dest = matrix_new(src->nrows, src->ncols);
@@ -41,14 +42,38 @@ Matrix* matrix_copy(const Matrix* src)
   return dest;
 }
 
+
+// Calculate the determinant of a matrix:
 double matrix_get_determinant(const Matrix* m) {
-  double det = 0;
-  // START HERE:
+  double det, diag, value = 0;
+  int col, row, fixed = 0;
 
+  // Apply the sum of the left->right diagonals:
+  for (col = 0; col < m->ncols; col++) {
+    diag = 1.0;
+    for (row = 0; row < m->nrows; row++) {
+      fixed = fixColumnIndex(m, col + row);
+      value = matrix_get_value(m, row, fixed);
+      diag *= value;
+    }
+    det += diag;
+  }
 
+  // Apply the sum of the right->left diagonals:
+  for (col = m->ncols - 1; col >= 0; col--) {
+    for (row = 0; row < m->nrows; row++) {
+      fixed = fixColumnIndex(m, col + row);
+      value = matrix_get_value(m, row, fixed);
+      diag *= value;
+    }
+    det -= diag;
+  }
+
+  return det;
 }
 
 
+// Matrix destructor:
 void matrix_free(Matrix **pp) {
   Matrix *pm = *pp;
   if (pm) {
@@ -66,15 +91,43 @@ void matrix_free(Matrix **pp) {
 }
 
 
-double matrix_get_value(const Matrix *p, int row, int col) {
-  int idx = getDatumIndex(p, row, col);
+// Get the value of a location in a matrix:
+double matrix_get_value(const Matrix *m, int row, int col) {
+  int idx = getDatumIndex(m, row, col);
 
-  double value = p->data[idx];
+  double value = m->data[idx];
 
   return value;
 }
 
 
+// Load the data into a matrix by columns:
+void matrix_load_by_column(Matrix *m, double in[]) {
+  int idx = 0;
+  for (int col = 0; col < m->ncols && !isnan(in[idx]); col++) {
+    for (int row = 0; row < m->nrows; row++) {
+      idx = getDatumIndex(m, row, col);
+      m->data[idx] = in[idx];
+      idx++;
+    }
+  }
+}
+
+
+// Load the data into a matrix by rows:
+void matrix_load_by_row(Matrix *m, double in[]) {
+  int idx = 0;
+  for (int row = 0; row < m->nrows && !isnan(in[idx]); row++) {
+    for (int col = 0; col < m->ncols; col++) {
+      idx = getDatumIndex(m, row, col);
+      m->data[idx] = in[idx];
+      idx++;
+    }
+  }
+}
+
+
+// Set the value of a location in a matrix:
 void matrix_set_value(Matrix *p, int row, int col, double value) {
   int idx = getDatumIndex(p, row, col);
 
@@ -82,6 +135,26 @@ void matrix_set_value(Matrix *p, int row, int col, double value) {
 }
 
 
+// Solve a set of simultaneous equations of the form AX = B:
+int matrix_solve_simeq(const Matrix *a, const Matrix *x,  Matrix *b) {
+  int failure = MATRIX_NO_ERR;
+
+  // Validate incoming matrices:
+  if (a->nrows != a->ncols) {
+    failure = MATRIX_DATA_NOT_SQUARE;
+  } else if (a->nrows != x->nrows) {
+    failure = MATRIX_UNEQUAL_ROW_COUNTS;
+  } else if (a->nrows != b->nrows) {
+    failure = MATRIX_UNEQUAL_ROW_COUNTS;
+  } else {
+    // START HERE
+  } 
+
+  return failure;
+}
+
+
+// Fix the column value to be within 0 <= col < ncols:
 int fixColumnIndex(const Matrix *m, int idx) {
   int fixed = idx;
   while (fixed >= m->ncols) {
@@ -95,6 +168,8 @@ int fixColumnIndex(const Matrix *m, int idx) {
 }
 
 
+// Get the content of a column in a matrix. 
+// This is returned as an nrows x 1 matrix.  
 Matrix* getColumnContent(const Matrix *src, int col) {
   Matrix *dest = matrix_new(src->nrows, 1);
   double value = 0.0;
@@ -108,6 +183,7 @@ Matrix* getColumnContent(const Matrix *src, int col) {
 }
 
 
+// Get the index of a specified row/column in the matrix data field:
 int getDatumIndex(const Matrix *m, int row, int col) {
   int idx = row * m->ncols + col;
 
@@ -115,6 +191,7 @@ int getDatumIndex(const Matrix *m, int row, int col) {
 }
 
 
+// Set the content of a column in a matrix:
 void setColumnContent(Matrix *dest, const Matrix *src, int col) {
   double value = 0.0;
 
