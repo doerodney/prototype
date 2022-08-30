@@ -1,6 +1,8 @@
 #ifndef INC_MATRIX_H
 #define INC_MATRIX_H
 
+#include <math.h> //NAN
+
 #define MATRIX_NO_ERR 0
 #define MATRIX_MEMORY_ERR 1
 #define MATRIX_NULL_ARG 2
