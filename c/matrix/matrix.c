@@ -7,6 +7,7 @@
 int fixColumnIndex(const Matrix *m, int idx);
 Matrix* getColumnContent(const Matrix *src, int col);
 int getDatumIndex(const Matrix *m, int row, int col);
+void setColumnContent(Matrix *dest, const Matrix *src, int col);
 
 
 // Matrix constructor:
@@ -62,7 +63,7 @@ double matrix_get_determinant(const Matrix* m) {
   // Apply the sum of the right->left diagonals:
   for (col = m->ncols - 1; col >= 0; col--) {
     for (row = 0; row < m->nrows; row++) {
-      fixed = fixColumnIndex(m, col + row);
+      fixed = fixColumnIndex(m, col - row);
       value = matrix_get_value(m, row, fixed);
       diag *= value;
     }
@@ -136,7 +137,7 @@ void matrix_set_value(Matrix *p, int row, int col, double value) {
 
 
 // Solve a set of simultaneous equations of the form AX = B:
-int matrix_solve_simeq(const Matrix *a, const Matrix *x,  Matrix *b) {
+int matrix_solve_simeq(const Matrix *a, Matrix *x, const Matrix *b) {
   int failure = MATRIX_NO_ERR;
 
   // Validate incoming matrices:
@@ -146,11 +147,57 @@ int matrix_solve_simeq(const Matrix *a, const Matrix *x,  Matrix *b) {
     failure = MATRIX_UNEQUAL_ROW_COUNTS;
   } else if (a->nrows != b->nrows) {
     failure = MATRIX_UNEQUAL_ROW_COUNTS;
-  } else {
-    // START HERE
-  } 
+  } else if (matrix_test_singular(a)) {
+    failure = MATRIX_SINGULAR;
+  }
+  else {
+    // Set the determinant of matrix a as the denominator:
+    double denom = matrix_get_determinant(a);
+    double det = 0.0;
 
+    Matrix *aprime = matrix_copy(a); 
+
+    // Iterate through columns in a matrix.
+    // Substitute the b matrix for the column col.
+    // Take the determinant of the resultant matrix.
+    // Implement Cramer's Rule.
+    for (int col = 0; col < a->ncols; col++) {
+      // Preserve matrix a column content: 
+      Matrix *stored = getColumnContent(aprime, col);
+
+      // Substitute b  matrix for the column in a': 
+      setColumnContent(aprime, b, col);
+
+      // Take determinant of resultant matrix:
+      det = matrix_get_determinant(aprime);
+      
+      // Record result in x matrix:
+      matrix_set_value(x, col, 0, det/denom);
+      
+      // Restore column in matrix a':
+      setColumnContent(aprime, stored, col);
+
+      // Free storage;
+      matrix_free(&stored);
+    }
+
+    matrix_free(&aprime);
+  } 
+  
   return failure;
+}
+
+
+// Test if the matrix is singular:
+int matrix_test_singular(const Matrix *m) {
+  int singular = 0;
+
+  double det = matrix_get_determinant(m);
+  if (det == 0.0) {
+    singular = 1;
+  }
+
+  return singular;
 }
 
 
