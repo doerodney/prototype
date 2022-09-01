@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/cabox/workspace/prototype/c/matrix/main.c
+stdio.h
+-
+matrix.h
+/home/cabox/workspace/prototype/c/matrix/matrix.h
+
+/home/cabox/workspace/prototype/c/matrix/matrix.c
+math.h
+-
+stdlib.h
+-
+string.h
+-
+matrix.h
+/home/cabox/workspace/prototype/c/matrix/matrix.h
+
+/home/cabox/workspace/prototype/c/matrix/matrix.h
+math.h
+-
+

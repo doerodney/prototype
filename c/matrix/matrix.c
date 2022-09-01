@@ -62,6 +62,7 @@ double matrix_get_determinant(const Matrix* m) {
 
   // Apply the sum of the right->left diagonals:
   for (col = m->ncols - 1; col >= 0; col--) {
+    diag = 1.0;
     for (row = 0; row < m->nrows; row++) {
       fixed = fixColumnIndex(m, col - row);
       value = matrix_get_value(m, row, fixed);
