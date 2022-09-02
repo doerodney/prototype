@@ -5,7 +5,7 @@
 
 // local functions;
 int fixColumnIndex(const Matrix *m, int idx);
-Matrix* getColumnContent(const Matrix *src, int col);
+Matrix* getColumnContent(Matrix *dest, const Matrix *src, int col);
 int getDatumIndex(const Matrix *m, int row, int col);
 void setColumnContent(Matrix *dest, const Matrix *src, int col);
 
@@ -16,7 +16,7 @@ Matrix* matrix_new(int nrows, int ncols) {
   // Allocate memory for the data:
   double *pd = calloc((size_t)(nrows * ncols), sizeof(*pd));
 
-  // Allocate memory for the matrix: 
+  // Allocate memory for the matrix:
   if (pd) {
     out = malloc(sizeof(Matrix));
 
@@ -89,7 +89,7 @@ void matrix_free(Matrix **pp) {
 
     // Set pointer to NULL:
     *pp = NULL;
-  } 
+  }
 }
 
 
@@ -156,35 +156,36 @@ int matrix_solve_simeq(const Matrix *a, Matrix *x, const Matrix *b) {
     double denom = matrix_get_determinant(a);
     double det = 0.0;
 
-    Matrix *aprime = matrix_copy(a); 
+    Matrix *aprime = matrix_copy(a);
+    Matrix *content = matrix_new(a->nrows, 1);
+
 
     // Iterate through columns in a matrix.
     // Substitute the b matrix for the column col.
     // Take the determinant of the resultant matrix.
     // Implement Cramer's Rule.
     for (int col = 0; col < a->ncols; col++) {
-      // Preserve matrix a column content: 
-      Matrix *stored = getColumnContent(aprime, col);
+      // Preserve matrix a column content:
+      getColumnContent(content, aprime, col);
 
-      // Substitute b  matrix for the column in a': 
+      // Substitute b matrix for the column in aprime:
       setColumnContent(aprime, b, col);
 
       // Take determinant of resultant matrix:
       det = matrix_get_determinant(aprime);
-      
+
       // Record result in x matrix:
       matrix_set_value(x, col, 0, det/denom);
-      
-      // Restore column in matrix a':
-      setColumnContent(aprime, stored, col);
 
-      // Free storage;
-      matrix_free(&stored);
+      // Restore column in matrix a':
+      setColumnContent(aprime, content, col);
     }
 
     matrix_free(&aprime);
-  } 
-  
+    matrix_free(&content);
+
+  }
+
   return failure;
 }
 
@@ -216,18 +217,16 @@ int fixColumnIndex(const Matrix *m, int idx) {
 }
 
 
-// Get the content of a column in a matrix. 
-// This is returned as an nrows x 1 matrix.  
-Matrix* getColumnContent(const Matrix *src, int col) {
-  Matrix *dest = matrix_new(src->nrows, 1);
+// Get the content of a column in a matrix.
+// This is returned as an nrows x 1 matrix.
+Matrix* getColumnContent(Matrix *dest, const Matrix *src, int col) {
   double value = 0.0;
 
   for (int row = 0; row < src->nrows; row++) {
     value = matrix_get_value(src, row, col);
-    matrix_set_value(dest, row, col, value);
-  }  
+    matrix_set_value(dest, row, 0, value);
+  }
 
-  return dest;
 }
 
 
