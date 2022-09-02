@@ -13,6 +13,7 @@ set(CMAKE_C_STANDARD_REQUIRED True)
 # Notify CMake of subdirectories:
 add_subdirectory(src)
 add_subdirectory(build)
+add_subdirectory(test)
 
 # Set output directories:
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
