@@ -7,6 +7,7 @@ cmake_minimum_required(VERSION 3.0.0)
 project(MtrxTest VERSION 1.0 LANGUAGES C)
 
 # Enable unit tests:
+include(CTest)
 enable_testing()
 
 # Specify the C standard to use:
@@ -14,8 +15,7 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED True)
 
 # Notify CMake of subdirectories:
-add_subdirectory(src)
-add_subdirectory(build)
+add_subdirectory(src build)
 add_subdirectory(test)
 
 # Set output directories:

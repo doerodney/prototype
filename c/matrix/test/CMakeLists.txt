@@ -1,3 +1,9 @@
+message("root/test CMakeLists.txt")
+
+project(MatrixTests LANGUAGES C)
+
+# Set the minimum version of cmake:
+cmake_minimum_required(VERSION 3.0.0)
 add_executable(	unit_tests
                 unit_tests.c
                	matrix_test.c
