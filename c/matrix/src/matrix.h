@@ -30,6 +30,8 @@ void matrix_free(Matrix **pp);
 
 double matrix_get_value(const Matrix *p, int row, int col);
 
+void matrix_load_by_column(Matrix *m, double in[]);
+
 void matrix_load_by_row(Matrix *m, double in[]);
 
 void matrix_set_value(Matrix *p, int row, int col, double value);
