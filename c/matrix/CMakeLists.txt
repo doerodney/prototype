@@ -6,6 +6,9 @@ cmake_minimum_required(VERSION 3.0.0)
 # Set the project version:
 project(MtrxTest VERSION 1.0 LANGUAGES C)
 
+# Enable unit tests:
+enable_testing()
+
 # Specify the C standard to use:
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED True)
