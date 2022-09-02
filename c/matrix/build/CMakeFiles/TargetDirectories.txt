@@ -1,3 +1,0 @@
-/home/cabox/workspace/prototype/c/matrix/build/CMakeFiles/edit_cache.dir
-/home/cabox/workspace/prototype/c/matrix/build/CMakeFiles/MtrxTest.dir
-/home/cabox/workspace/prototype/c/matrix/build/CMakeFiles/rebuild_cache.dir
