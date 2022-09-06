@@ -1,6 +1,7 @@
 message("root/test CMakeLists.txt")
 
 project(MatrixTests LANGUAGES C)
+enable_testing()
 
 # Set the minimum version of cmake:
 cmake_minimum_required(VERSION 3.0.0)

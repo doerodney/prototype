@@ -17,7 +17,7 @@ To build, start with a clean source tree.
 From the project root, do this once:
 ```
 cd ./build
-cmake ../src
+cmake ../
 ```
 
 This sets up CMake files in the ./build directory.
@@ -29,4 +29,12 @@ cmake --build .
 ```
 
 The build artifact(s) will be in the ./build directory.
+
+To run unit tests, from the build directory, cd test.
+```
+ctest
+```
+``
+
+
 
