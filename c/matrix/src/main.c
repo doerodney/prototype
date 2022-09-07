@@ -4,6 +4,7 @@
 
 int main(int argc, char *argv[]) {
   int ncols = 3, nrows = 3;
+  int failure = MATRIX_NO_ERR;
 
   Matrix* a = matrix_new(nrows, ncols);
 
@@ -21,7 +22,9 @@ int main(int argc, char *argv[]) {
       }
   }
 
-  double det = matrix_get_determinant(a);
+  double det = 0.0;
+  
+  (void) matrix_get_determinant(a, &det);
 
   printf("Determinant: %g\n", det);
 
@@ -38,7 +41,7 @@ int main(int argc, char *argv[]) {
 
   Matrix *x = matrix_new(nrows, 1);
 
-  int failure = matrix_solve_simeq(a, x, b);
+  failure = matrix_solve_simeq(a, x, b);
 
   printf("\nsimultaneous equation failure = %d\n", failure);
 

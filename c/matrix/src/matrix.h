@@ -4,12 +4,13 @@
 #include <math.h> //NAN
 
 #define MATRIX_NO_ERR 0
-#define MATRIX_MEMORY_ERR 1
-#define MATRIX_NULL_ARG 2
-#define MATRIX_DATA_NOT_SQUARE 3
-#define MATRIX_UNEQUAL_ROW_COUNTS 4
-#define MATRIX_INVALID_COLUMN_COUNT 5
-#define MATRIX_SINGULAR 6
+#define MATRIX_NULL_POINTER 1
+#define MATRIX_MEMORY_ERR 2
+#define MATRIX_NULL_ARG 3
+#define MATRIX_DATA_NOT_SQUARE 4
+#define MATRIX_UNEQUAL_ROW_COUNTS 5
+#define MATRIX_INVALID_COLUMN_COUNT 6
+#define MATRIX_SINGULAR 7
 
 typedef struct {
   int nrows;
@@ -24,7 +25,7 @@ Matrix* matrix_new(int nrows, int ncols);
 
 Matrix* matrix_copy(const Matrix* src);
 
-double matrix_get_determinant(const Matrix* p);
+int matrix_get_determinant(const Matrix* p, double *det);
 
 void matrix_free(Matrix **pp);
 

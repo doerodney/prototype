@@ -13,21 +13,23 @@ void setColumnContent(Matrix *dest, const Matrix *src, int col);
 // Matrix constructor:
 Matrix* matrix_new(int nrows, int ncols) {
   Matrix  *out = NULL;
-  // Allocate memory for the data:
-  double *pd = calloc((size_t)(nrows * ncols), sizeof(*pd));
+  if ((nrows * ncols) > 0) {
+    // Allocate memory for the data:
+    double *pd = calloc((size_t)(nrows * ncols), sizeof(*pd));
 
-  // Allocate memory for the matrix:
-  if (pd) {
-    out = malloc(sizeof(Matrix));
+    // Allocate memory for the matrix:
+    if (pd) {
+      out = malloc(sizeof(Matrix));
 
-    if (out) {
-      *out = (Matrix) {.nrows = nrows, .ncols = ncols, .data = pd};
-    }
-    else {
-      free((void*) pd);
+      if (out) {
+        *out = (Matrix) {.nrows = nrows, .ncols = ncols, .data = pd};
+      }
+      else {
+        free((void*) pd);
+      }
     }
   }
-
+  
   return out;
 }
 
@@ -45,33 +47,44 @@ Matrix* matrix_copy(const Matrix* src)
 
 
 // Calculate the determinant of a matrix:
-double matrix_get_determinant(const Matrix* m) {
-  double det, diag, value = 0;
+int matrix_get_determinant(const Matrix* m, double *det) {
+  int failure = MATRIX_NO_ERR;
+  double diag, value = 0;
   int col, row, fixed = 0;
 
-  // Apply the sum of the left->right diagonals:
-  for (col = 0; col < m->ncols; col++) {
-    diag = 1.0;
-    for (row = 0; row < m->nrows; row++) {
-      fixed = fixColumnIndex(m, col + row);
-      value = matrix_get_value(m, row, fixed);
-      diag *= value;
+  // Test for null pointers in arguments:
+  if ((NULL == m) || (NULL == det)) {
+      failure = MATRIX_NULL_POINTER;
+  } else if ((m->ncols > 0) && (m->ncols == m->nrows)) {
+     // Continue if the matrix has data and is square:
+    *det = 0.0;
+
+    // Apply the sum of the left->right diagonals:
+    for (col = 0; col < m->ncols; col++) {
+        diag = 1.0;
+        for (row = 0; row < m->nrows; row++) {
+        fixed = fixColumnIndex(m, col + row);
+        value = matrix_get_value(m, row, fixed);
+        diag *= value;
+        }
+        *det += diag;
     }
-    det += diag;
+
+    // Apply the sum of the right->left diagonals:
+    for (col = m->ncols - 1; col >= 0; col--) {
+        diag = 1.0;
+        for (row = 0; row < m->nrows; row++) {
+        fixed = fixColumnIndex(m, col - row);
+        value = matrix_get_value(m, row, fixed);
+        diag *= value;
+        }
+        *det -= diag;
+    }
+  } else {
+      failure = MATRIX_DATA_NOT_SQUARE;
   }
 
-  // Apply the sum of the right->left diagonals:
-  for (col = m->ncols - 1; col >= 0; col--) {
-    diag = 1.0;
-    for (row = 0; row < m->nrows; row++) {
-      fixed = fixColumnIndex(m, col - row);
-      value = matrix_get_value(m, row, fixed);
-      diag *= value;
-    }
-    det -= diag;
-  }
-
-  return det;
+  return failure;
 }
 
 
@@ -153,37 +166,40 @@ int matrix_solve_simeq(const Matrix *a, Matrix *x, const Matrix *b) {
   }
   else {
     // Set the determinant of matrix a as the denominator:
-    double denom = matrix_get_determinant(a);
-    double det = 0.0;
+    double denom = 0.0;
+    failure = matrix_get_determinant(a, &denom);
+    if (!failure) {
+      double det = 0.0;
 
-    Matrix *aprime = matrix_copy(a);
-    Matrix *content = matrix_new(a->nrows, 1);
+      Matrix *aprime = matrix_copy(a);
+      Matrix *content = matrix_new(a->nrows, 1);
 
+      // Iterate through columns in a matrix.
+      // Substitute the b matrix for the column col.
+      // Take the determinant of the resultant matrix.
+      // Implement Cramer's Rule.
+      for (int col = 0; col < a->ncols && !failure; col++) {
+        // Preserve matrix a column content:
+        getColumnContent(content, aprime, col);
 
-    // Iterate through columns in a matrix.
-    // Substitute the b matrix for the column col.
-    // Take the determinant of the resultant matrix.
-    // Implement Cramer's Rule.
-    for (int col = 0; col < a->ncols; col++) {
-      // Preserve matrix a column content:
-      getColumnContent(content, aprime, col);
+        // Substitute b matrix for the column in aprime:
+        setColumnContent(aprime, b, col);
 
-      // Substitute b matrix for the column in aprime:
-      setColumnContent(aprime, b, col);
+        // Take determinant of resultant matrix:
+        failure = matrix_get_determinant(aprime, &det);
+        if (!failure) {
 
-      // Take determinant of resultant matrix:
-      det = matrix_get_determinant(aprime);
+          // Record result in x matrix:
+          matrix_set_value(x, col, 0, det/denom);
 
-      // Record result in x matrix:
-      matrix_set_value(x, col, 0, det/denom);
+          // Restore column in matrix a':
+          setColumnContent(aprime, content, col);
+        }
+      }
 
-      // Restore column in matrix a':
-      setColumnContent(aprime, content, col);
+      matrix_free(&aprime);
+      matrix_free(&content);
     }
-
-    matrix_free(&aprime);
-    matrix_free(&content);
-
   }
 
   return failure;
@@ -194,7 +210,8 @@ int matrix_solve_simeq(const Matrix *a, Matrix *x, const Matrix *b) {
 int matrix_test_singular(const Matrix *m) {
   int singular = 0;
 
-  double det = matrix_get_determinant(m);
+  double det = 0.0; 
+  (void) matrix_get_determinant(m, &det);
   if (det == 0.0) {
     singular = 1;
   }

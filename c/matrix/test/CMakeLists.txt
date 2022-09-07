@@ -14,3 +14,5 @@ target_include_directories(unit_tests PRIVATE ../src)
 
 add_test(NAME TestIsSingular COMMAND unit_tests 1)
 add_test(NAME TestIsNotSingular COMMAND unit_tests 2)
+add_test(NAME TestDeterminantOfNonSquareMatrix COMMAND unit_tests 3)
+add_test(NAME TestDeterminantOfEmptyMatrix COMMAND unit_tests 4)
