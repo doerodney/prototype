@@ -1,6 +1,11 @@
-# How to build
+# Description
+This implements code that solves N-dimensional sets of simultaneous equations, using the traditional AX=B model.  It uses Cramer's Rule to implement the solutions.  As a side benefit, since Cramer's Rule uses matrix determinants, this code exposes a function to get the determinant of an NxN matrix.
 
-The `git clean` command is your friend.  It removes anything that is not in version control.
+This code was used as a test platform for me to learn CMake.  This implements build and unit test execution by CMake.
+
+## How to Build
+
+To appreciate what CMake creates, it is useful to first start with a clean repository.  The `git clean` command removes anything that is not in version control.
 
 This tells you what will happen:
 ```
@@ -30,11 +35,13 @@ cmake --build .
 
 The build artifact(s) will be in the ./build directory.
 
-To run unit tests, from the build directory, cd test.
+To run unit tests, from the build directory:
 ```
+cd test
 ctest
 ```
-``
+
+The results of unit tests will be displayed.
 
 
 
