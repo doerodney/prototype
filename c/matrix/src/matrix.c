@@ -88,7 +88,7 @@ void matrix_free(Matrix **pp) {
   Matrix *pm = *pp;
   if (pm) {   
     // Free struct storage:
-    free(*pp);
+    free((void*) *pp);
 
     // Set pointer to NULL:
     *pp = NULL;
