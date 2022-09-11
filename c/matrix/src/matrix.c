@@ -14,19 +14,14 @@ void setColumnContent(Matrix *dest, const Matrix *src, int col);
 Matrix* matrix_new(int nrows, int ncols) {
   Matrix  *out = NULL;
   if ((nrows * ncols) > 0) {
-    // Allocate memory for the data:
-    double *pd = calloc((size_t)(nrows * ncols), sizeof(*pd));
-
+    
     // Allocate memory for the matrix:
-    if (pd) {
-      out = malloc(sizeof(Matrix));
+    size_t data_byte_count = nrows * ncols * sizeof(double);
+    out = malloc(sizeof(Matrix) + data_byte_count);
 
-      if (out) {
-        *out = (Matrix) {.nrows = nrows, .ncols = ncols, .data = pd};
-      }
-      else {
-        free((void*) pd);
-      }
+    if (out) {
+      *out = (Matrix) {.nrows = nrows, .ncols = ncols};
+      memset((void*) out->data, 0, data_byte_count);
     }
   }
   
@@ -54,29 +49,29 @@ int matrix_get_determinant(const Matrix* m, double *det) {
 
   // Test for null pointers in arguments:
   if ((NULL == m) || (NULL == det)) {
-      failure = MATRIX_NULL_POINTER;
+    failure = MATRIX_NULL_POINTER;
   } else if ((m->ncols > 0) && (m->ncols == m->nrows)) {
      // Continue if the matrix has data and is square:
     *det = 0.0;
 
     // Apply the sum of the left->right diagonals:
     for (col = 0; col < m->ncols; col++) {
-        diag = 1.0;
-        for (row = 0; row < m->nrows; row++) {
+      diag = 1.0;
+      for (row = 0; row < m->nrows; row++) {
         fixed = fixColumnIndex(m, col + row);
         value = matrix_get_value(m, row, fixed);
         diag *= value;
-        }
-        *det += diag;
+      }
+      *det += diag;
     }
 
     // Apply the sum of the right->left diagonals:
     for (col = m->ncols - 1; col >= 0; col--) {
-        diag = 1.0;
-        for (row = 0; row < m->nrows; row++) {
+      diag = 1.0;
+      for (row = 0; row < m->nrows; row++) {
         fixed = fixColumnIndex(m, col - row);
-        value = matrix_get_value(m, row, fixed);
-        diag *= value;
+          value = matrix_get_value(m, row, fixed);
+          diag *= value;
         }
         *det -= diag;
     }
@@ -91,12 +86,7 @@ int matrix_get_determinant(const Matrix* m, double *det) {
 // Matrix destructor:
 void matrix_free(Matrix **pp) {
   Matrix *pm = *pp;
-  if (pm) {
-    // Free data storage:
-    if (pm->data) {
-      free(pm->data);
-    }
-
+  if (pm) {   
     // Free struct storage:
     free(*pp);
 
@@ -260,9 +250,7 @@ void setColumnContent(Matrix *dest, const Matrix *src, int col) {
   double value = 0.0;
 
   for (int row = 0; row < dest->nrows; row++) {
-     value = matrix_get_value(src, row, 0);
-     matrix_set_value(dest, row, col, value);
+    value = matrix_get_value(src, row, 0);
+    matrix_set_value(dest, row, col, value);
   }
 }
-
-

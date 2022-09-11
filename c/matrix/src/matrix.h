@@ -15,7 +15,7 @@
 typedef struct {
   int nrows;
   int ncols;
-  double *data;
+  double data[];
 
 } Matrix;
 
