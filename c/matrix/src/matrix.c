@@ -14,7 +14,7 @@ void setColumnContent(Matrix *dest, const Matrix *src, int col);
 Matrix* matrix_new(int nrows, int ncols) {
   Matrix  *out = NULL;
   if ((nrows * ncols) > 0) {
-    
+
     // Allocate memory for the matrix:
     size_t data_byte_count = nrows * ncols * sizeof(double);
     out = malloc(sizeof(Matrix) + data_byte_count);
@@ -24,7 +24,7 @@ Matrix* matrix_new(int nrows, int ncols) {
       memset((void*) out->data, 0, data_byte_count);
     }
   }
-  
+
   return out;
 }
 
@@ -51,7 +51,7 @@ int matrix_get_determinant(const Matrix* m, double *det) {
   if ((NULL == m) || (NULL == det)) {
     failure = MATRIX_NULL_POINTER;
   } else if ((m->ncols > 0) && (m->ncols == m->nrows)) {
-     // Continue if the matrix has data and is square:
+    // Continue if the matrix has data and is square:
     *det = 0.0;
 
     // Apply the sum of the left->right diagonals:
@@ -70,13 +70,13 @@ int matrix_get_determinant(const Matrix* m, double *det) {
       diag = 1.0;
       for (row = 0; row < m->nrows; row++) {
         fixed = fixColumnIndex(m, col - row);
-          value = matrix_get_value(m, row, fixed);
-          diag *= value;
-        }
-        *det -= diag;
+        value = matrix_get_value(m, row, fixed);
+        diag *= value;
+      }
+      *det -= diag;
     }
   } else {
-      failure = MATRIX_DATA_NOT_SQUARE;
+    failure = MATRIX_DATA_NOT_SQUARE;
   }
 
   return failure;
