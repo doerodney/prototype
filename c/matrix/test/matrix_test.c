@@ -1,5 +1,6 @@
 #include "../src/matrix.h"
 #include <stdlib.h>
+#include <math.h>
 
 #include "matrix_test.h"
 
@@ -45,4 +46,24 @@ void TestDeterminantOfEmptyMatrix() {
     if (failure != MATRIX_NULL_POINTER) {
         exit(1);
     }
+}
+
+
+void TestDeterminantOfValidMatrix() {
+  int nrows = 0, ncols = 0;
+  double det = 0.0;
+  double epsilon = 0.001;
+  double target = -306;
+  Matrix *a = matrix_new(nrows, ncols);
+  MATRIX_LOAD_BY_ROW(a, 6, 1, 1, 4, -2, 5, 2, 8, 7);
+  int failure = matrix_get_determinant(a, &det);
+
+  if (failure != MATRIX_NO_ERR) {
+    exit(1);
+  }
+
+  if (fabs(det - target) > epsilon) {
+    exit(1);
+  }
+  
 }
