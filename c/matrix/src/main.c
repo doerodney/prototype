@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
   
   (void) matrix_get_determinant(a, &det);
 
-  printf("Determinant: %g\n", det);
+  printf("determinant: %g\n", det);
 
   Matrix *b = matrix_new(nrows, 1);
   MATRIX_LOAD_BY_COLUMN(b, 21, 44, 112);
@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
 
   for (int row = 0, col = 0; row < nrows; row++) {
       n = matrix_get_value(b, row, col);
-      printf("Value at (%d, %d) is %2g\n", row, col, n);
+      printf("value at (%d, %d) is %2g\n", row, col, n);
   }
 
 
@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
   printf("simultaneous equation solution should be : (1, 5, 10)\n");
   for (int row = 0, col = 0; row < nrows; row++) {
       n = matrix_get_value(x, row, col);
-      printf("Value at (%d, %d) is %2g\n", row, col, n);
+      printf("value at (%d, %d) is %2g\n", row, col, n);
   }
 
 
