@@ -17,7 +17,7 @@ Matrix* matrix_new(int nrows, int ncols) {
 
     // Allocate memory for the matrix:
     size_t data_byte_count = nrows * ncols * sizeof(double);
-    out = malloc(sizeof(Matrix) + data_byte_count);
+    out = (Matrix*) malloc(sizeof(Matrix) + data_byte_count);
 
     if (out) {
       *out = (Matrix) {.nrows = nrows, .ncols = ncols};
