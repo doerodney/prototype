@@ -79,3 +79,35 @@ void TestDeterminantOfValidMatrix() {
   }
 
 }
+
+
+void TestSimEq() {
+  int nrows = 3, ncols = 3;
+  double solution[] = {1.0, 5.0, 10.0};
+  Matrix *a = matrix_new(nrows, ncols);
+  Matrix *b = matrix_new(nrows, 1);
+  Matrix *x = matrix_new(nrows, 1);
+  MATRIX_LOAD_BY_ROW(a, 6, 1, 1, 4, -2, 5, 2, 8, 7);
+  MATRIX_LOAD_BY_COLUMN(b, 21, 44, 112);
+  int failure = matrix_solve_simeq(a, x, b);
+
+  if (failure != MATRIX_NO_ERR) {
+    exit(1);
+  }
+
+  for (int row = 0, col = 0; row < nrows; row++) {
+    double value = matrix_get_value(x, row, col);
+    if (dcmp(value, solution[row])) {
+      exit(1);
+    }
+  }
+  
+  matrix_free(&a);
+  matrix_free(&b);
+  matrix_free(&x);
+
+  if (a || b || x) {
+      exit(1);
+  }
+}
+

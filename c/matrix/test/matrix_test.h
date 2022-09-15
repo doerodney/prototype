@@ -6,5 +6,6 @@ void TestIsNotSingular();
 void TestDeterminantOfNonSquareMatrix();
 void TestDeterminantOfEmptyMatrix();
 void TestDeterminantOfValidMatrix();
+void TestSimEq();
 
 #endif

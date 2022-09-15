@@ -19,5 +19,13 @@ int main(int argc, char *argv[]) {
   if (argc < 2 && !strcmp(argv[1], "4") ) {
     TestDeterminantOfEmptyMatrix();
   }
+  
+  if (argc < 2 && !strcmp(argv[1], "5") ) {
+    TestDeterminantOfValidMatrix();
+  }
+  
+  if (argc < 2 && !strcmp(argv[1], "6") ) {
+    TestSimEq();
+  }
 
 }

@@ -19,4 +19,5 @@ add_test(NAME TestIsNotSingular COMMAND unit_tests 2)
 add_test(NAME TestDeterminantOfNonSquareMatrix COMMAND unit_tests 3)
 add_test(NAME TestDeterminantOfEmptyMatrix COMMAND unit_tests 4)
 add_test(NAME TestDeterminantOfValidMatrix COMMAND unit_tests 5)
+add_test(NAME TestSimEq COMMAND unit_tests 6)
 
