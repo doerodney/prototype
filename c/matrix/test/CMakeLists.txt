@@ -1,4 +1,4 @@
-message("root/test CMakeLists.txt")
+message("/test/CMakeLists.txt")
 
 project(MatrixTests LANGUAGES C)
 enable_testing()

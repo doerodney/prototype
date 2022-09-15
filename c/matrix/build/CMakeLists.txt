@@ -1,1 +1,1 @@
-message("root/build CMakeLists.txt")
+message("/build/CMakeLists.txt")

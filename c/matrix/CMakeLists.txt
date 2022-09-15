@@ -1,4 +1,4 @@
-message("root CMakeLists.txt")
+message("/CMakeLists.txt")
 
 # Set the minimum version of cmake:
 cmake_minimum_required(VERSION 3.0.0)
@@ -14,5 +14,5 @@ set(CMAKE_C_STANDARD_REQUIRED True)
 
 # Notify CMake of subdirectories:
 add_subdirectory(src)
-add_subdirectory(test)
+# add_subdirectory(test)
 
