@@ -4,6 +4,19 @@
 #include "matrix.h"
 #include "matrix_test.h"
 
+static const double epsilon = 0.001;
+
+int dcmp(double a, double b) {
+  int result = (a < b) ? -1 : 1;
+
+  if (fabs(a - b) < epsilon) {
+    result = 0;
+  }
+
+  return result;
+}
+
+
 void TestIsSingular() {
   int nrows = 3, ncols = 3;
   Matrix *a = matrix_new(nrows, ncols);
@@ -52,7 +65,6 @@ void TestDeterminantOfEmptyMatrix() {
 void TestDeterminantOfValidMatrix() {
   int nrows = 0, ncols = 0;
   double det = 0.0;
-  double epsilon = 0.001;
   double target = -306;
   Matrix *a = matrix_new(nrows, ncols);
   MATRIX_LOAD_BY_ROW(a, 6, 1, 1, 4, -2, 5, 2, 8, 7);
@@ -62,7 +74,7 @@ void TestDeterminantOfValidMatrix() {
     exit(1);
   }
 
-  if (fabs(det - target) > epsilon) {
+  if (dcmp(det, target)) {
     exit(1);
   }
 
