@@ -18,5 +18,3 @@ set(CMAKE_C_STANDARD_REQUIRED True)
 add_subdirectory(src)
 # add_subdirectory(test)
 
-include_directories(${PROJECT_SOURCE_DIR}/src/include)
-
