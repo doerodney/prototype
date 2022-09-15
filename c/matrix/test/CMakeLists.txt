@@ -7,7 +7,6 @@ enable_testing()
 cmake_minimum_required(VERSION 3.0.0)
 
 set(SOURCES unit_tests.c matrix_test.c)
-message("SOURCES: " ${SOURCES})
 
 add_executable(unit_tests ${SOURCES})
 
@@ -20,3 +19,4 @@ add_test(NAME TestIsNotSingular COMMAND unit_tests 2)
 add_test(NAME TestDeterminantOfNonSquareMatrix COMMAND unit_tests 3)
 add_test(NAME TestDeterminantOfEmptyMatrix COMMAND unit_tests 4)
 add_test(NAME TestDeterminantOfValidMatrix COMMAND unit_tests 5)
+

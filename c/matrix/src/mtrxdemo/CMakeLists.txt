@@ -1,7 +1,6 @@
 message("/src/mtrxdemo/CMakeLists.txt")
 
 set(SOURCES main.c)
-message("SOURCES: " ${SOURCES})
 
 add_executable(${CMAKE_PROJECT_NAME} ${SOURCES})
 
