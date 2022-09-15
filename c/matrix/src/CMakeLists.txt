@@ -1,4 +1,6 @@
 message("/src/CMakeLists.txt")
 
-add_subdirectory(mtrxdemo matrix)
+add_subdirectory(include)
+add_subdirectory(matrix)
+add_subdirectory(mtrxdemo)
 
