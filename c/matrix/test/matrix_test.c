@@ -1,7 +1,7 @@
-#include "../src/matrix.h"
 #include <stdlib.h>
 #include <math.h>
 
+#include "matrix.h"
 #include "matrix_test.h"
 
 void TestIsSingular() {

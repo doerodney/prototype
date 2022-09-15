@@ -16,5 +16,5 @@ set(CMAKE_C_STANDARD_REQUIRED True)
 
 # Notify CMake of subdirectories:
 add_subdirectory(src)
-# add_subdirectory(test)
+add_subdirectory(test)
 
