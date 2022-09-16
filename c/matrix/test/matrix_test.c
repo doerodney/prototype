@@ -22,6 +22,7 @@ void TestIsSingular() {
   Matrix *a = matrix_new(nrows, ncols);
   MATRIX_LOAD_BY_ROW(a, 0, 0, 0, 1, 1, 1, 2, 2, 2);
   int isSingular = matrix_test_singular(a);
+  matrix_free(&a);
   if (!isSingular) {
     exit(1);
   }
@@ -32,6 +33,7 @@ void TestIsNotSingular() {
   Matrix *a = matrix_new(nrows, ncols);
   MATRIX_LOAD_BY_ROW(a, 6, 1, 1, 4, -2, 5, 2, 8, 7);
   int isSingular = matrix_test_singular(a);
+  matrix_free(&a);
   if (isSingular) {
     exit(1);
   }
@@ -55,6 +57,7 @@ void TestDeterminantOfEmptyMatrix() {
   double det = 0.0;
   Matrix *a = matrix_new(nrows, ncols);
   int failure = matrix_get_determinant(a, &det);
+  matrix_free(&a);
 
   if (failure != MATRIX_NULL_POINTER) {
     exit(1);
@@ -69,6 +72,7 @@ void TestDeterminantOfValidMatrix() {
   Matrix *a = matrix_new(nrows, ncols);
   MATRIX_LOAD_BY_ROW(a, 6, 1, 1, 4, -2, 5, 2, 8, 7);
   int failure = matrix_get_determinant(a, &det);
+  matrix_free(&a);
 
   if (failure != MATRIX_NO_ERR) {
     exit(1);
