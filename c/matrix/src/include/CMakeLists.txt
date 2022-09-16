@@ -1,2 +1,1 @@
-message("/src/include/CMakeLists.txt")
-
+message("reading /src/include/CMakeLists.txt")

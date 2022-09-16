@@ -1,4 +1,4 @@
-message("/src/CMakeLists.txt")
+message("reading /src/CMakeLists.txt")
 
 add_subdirectory(include)
 add_subdirectory(matrix)
