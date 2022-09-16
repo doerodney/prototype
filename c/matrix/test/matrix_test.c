@@ -53,7 +53,7 @@ void TestDeterminantOfNonSquareMatrix() {
 void TestDeterminantOfEmptyMatrix() {
   int nrows = 0, ncols = 0;
   double det = 0.0;
-  Matrix *a = matrix_new(nrows, ncols);
+  Matrix *a = matrix_new(nrows, ncols); 
   int failure = matrix_get_determinant(a, &det);
 
   if (failure != MATRIX_NULL_POINTER) {
