@@ -5,7 +5,7 @@
 
 // local functions;
 int fixColumnIndex(const Matrix *m, int idx);
-Matrix* getColumnContent(Matrix *dest, const Matrix *src, int col);
+void getColumnContent(Matrix *dest, const Matrix *src, int col);
 int getDatumIndex(const Matrix *m, int row, int col);
 void setColumnContent(Matrix *dest, const Matrix *src, int col);
 
@@ -226,7 +226,7 @@ int fixColumnIndex(const Matrix *m, int idx) {
 
 // Get the content of a column in a matrix.
 // This is returned as an nrows x 1 matrix.
-Matrix* getColumnContent(Matrix *dest, const Matrix *src, int col) {
+void getColumnContent(Matrix *dest, const Matrix *src, int col) {
   double value = 0.0;
 
   for (int row = 0; row < src->nrows; row++) {

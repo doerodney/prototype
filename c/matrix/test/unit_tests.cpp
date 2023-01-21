@@ -30,7 +30,7 @@ TEST(MatrixTest, DetectNonSingularity) {
   const double data[] = {6, 1, 1, 4, -2, 5, 2, 8, 7};
 
   Matrix *a = matrix_new(nrows, ncols);
-  for (int row = 0, col = 0, i = 0; row < nrows; row++) {
+  for (int row = 0, i = 0; row < nrows; row++) {
     for (int col = 0; col < ncols; col++) {
       matrix_set_value(a, row, col, data[i++]);
     }
@@ -75,7 +75,7 @@ TEST(MatrixTest, DeterminantOfValidMatrix) {
   double target = -306.0;
 
   Matrix *a = matrix_new(nrows, ncols);
-  for (int row = 0, col = 0, i = 0; row < nrows; row++) {
+  for (int row = 0, i = 0; row < nrows; row++) {
     for (int col = 0; col < ncols; col++) {
       matrix_set_value(a, row, col, data[i++]);
     }
